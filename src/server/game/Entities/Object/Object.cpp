@@ -232,7 +232,7 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) c
 
     if (WorldObject const* worldObject = dynamic_cast<WorldObject const*>(this))
     {
-        if (worldObject->GetAIAnimKitId() || worldObject->GetMovementAnimKitId() || worldObject->GetMeleeAnimKitId())
+        if (worldObject->GetAIAnim() || worldObject->GetMovementAnim() || worldObject->GetMeleeAnim())
             flags |= UPDATEFLAG_ANIMKITS;
     }
 
