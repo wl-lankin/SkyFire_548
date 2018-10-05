@@ -785,6 +785,10 @@ class WorldObject : public Object, public WorldLocation
         virtual float GetStationaryZ() const { return GetPositionZ(); }
         virtual float GetStationaryO() const { return GetOrientation(); }
 
+        virtual uint16 GetAIAnim() const       { return 0; }
+        virtual uint16 GetMovementAnim() const { return 0; }
+        virtual uint16 GetMeleeAnim() const    { return 0; }
+
     protected:
         std::string m_name;
         bool m_isActive;

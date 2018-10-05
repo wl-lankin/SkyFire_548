@@ -230,6 +230,12 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData* data, Player* target) c
             break;
     }
 
+    if (WorldObject const* worldObject = dynamic_cast<WorldObject const*>(this))
+    {
+        if (worldObject->GetAIAnimKitId() || worldObject->GetMovementAnimKitId() || worldObject->GetMeleeAnimKitId())
+            flags |= UPDATEFLAG_ANIMKITS;
+    }
+
     if (flags & UPDATEFLAG_STATIONARY_POSITION)
     {
         // UPDATETYPE_CREATE_OBJECT2 for some gameobject types...
@@ -391,7 +397,7 @@ void Object::BuildMovementUpdate(ByteBuffer* data, uint16 flags) const
     bool hasTarget = flags & UPDATEFLAG_HAS_TARGET;
     bool hasTransport = flags & UPDATEFLAG_TRANSPORT;
     bool hasVehicle = flags & UPDATEFLAG_VEHICLE;
-    bool hasAnimKits = false; //flags & UPDATEFLAG_ANIMKITS;
+    bool hasAnimKits = flags & UPDATEFLAG_ANIMKITS;
 
     bool hasFallData;
     bool hasFallDirection;
@@ -515,14 +521,13 @@ void Object::BuildMovementUpdate(ByteBuffer* data, uint16 flags) const
         data->WriteBit(self->m_movementInfo.transport.time3 && self->m_movementInfo.transport.guid);
     }
 
-    /*
     if (hasAnimKits)
     {
-        data->WriteBit(1);  // Missing AnimKit1
-        data->WriteBit(1);  // Missing AnimKit2
-        data->WriteBit(1);  // Missing AnimKit3
+        WorldObject const* self = static_cast<WorldObject const*>(this);
+        data->WriteBit(self->GetAIAnim());
+        data->WriteBit(self->GetMovementAnim());
+        data->WriteBit(self->GetMeleeAnim());
     }
-    */
 
     if (hasTarget)
     {
@@ -696,16 +701,18 @@ void Object::BuildMovementUpdate(ByteBuffer* data, uint16 flags) const
         *data << float(self->GetPositionX());
     }
 
-    /*
     if (hasAnimKits)
     {
-        if (hasAnimKit3)
-            *data << uint16(animKit3);
-        if (hasAnimKit2)
-            *data << uint16(animKit2);
-        if (hasAnimKit1)
-            *data << uint16(animKit1);
-    }*/
+        WorldObject const* self = static_cast<WorldObject const*>(this);
+        if (self->GetMeleeAnim())
+            *data << uint16(self->GetMeleeAnim());
+
+        if (self->GetMovementAnim())
+            *data << uint16(self->GetMovementAnim());
+
+        if (self->GetAIAnim())
+            *data << uint16(self->GetAIAnim());
+    }
 
     if (hasTransport)
     {
