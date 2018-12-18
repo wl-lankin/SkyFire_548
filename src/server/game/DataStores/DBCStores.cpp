@@ -187,6 +187,9 @@ static DigsitePOIPolygonContainer sDigsitePOIPolygons;
 DBCStorage <ScalingStatDistributionEntry> sScalingStatDistributionStore(ScalingStatDistributionfmt);
 DBCStorage <ScalingStatValuesEntry> sScalingStatValuesStore(ScalingStatValuesfmt);
 
+DBCStorage <ScenarioEntry> sScenarioStore(Scenariofmt);
+DBCStorage <ScenarioStepEntry> sScenarioStepStore(ScenarioStepfmt);
+
 DBCStorage <SkillLineEntry> sSkillLineStore(SkillLinefmt);
 DBCStorage <SkillLineAbilityEntry> sSkillLineAbilityStore(SkillLineAbilityfmt);
 
@@ -269,6 +272,7 @@ DBCStorage <PhaseEntry> sPhaseStore(PhaseEntryfmt);
 DBCStorage <PhaseGroupEntry> sPhaseGroupStore(PhaseGroupfmt);
 
 PhaseGroupContainer sPhasesByGroup;
+
 
 typedef std::list<std::string> StoreProblemList;
 
@@ -544,6 +548,9 @@ void LoadDBCStores(const std::string& dataPath)
 
     LoadDBC(availableDbcLocales, bad_dbc_files, sScalingStatDistributionStore, dbcPath, "ScalingStatDistribution.dbc");//15595
     LoadDBC(availableDbcLocales, bad_dbc_files, sScalingStatValuesStore,      dbcPath, "ScalingStatValues.dbc");//15595
+    LoadDBC(availableDbcLocales, bad_dbc_files, sScenarioStore,               dbcPath, "Scenario.dbc"); // 18414
+    LoadDBC(availableDbcLocales, bad_dbc_files, sScenarioStepStore,           dbcPath, "ScenarioStep.dbc"); // 18414
+
     LoadDBC(availableDbcLocales, bad_dbc_files, sSkillLineStore,              dbcPath, "SkillLine.dbc");//15595
     LoadDBC(availableDbcLocales, bad_dbc_files, sSkillLineAbilityStore,       dbcPath, "SkillLineAbility.dbc");//15595
     LoadDBC(availableDbcLocales, bad_dbc_files, sSoundEntriesStore,           dbcPath, "SoundEntries.dbc");//15595
