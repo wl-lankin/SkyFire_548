@@ -1070,6 +1070,12 @@ class WorldSession
         void HandleRequestCategoryCooldowns(WorldPacket& recvPacket);
         void HandleRequestCemeteryList(WorldPacket& recvPacket);
 
+        /// Scenario
+        void HandleQueryScenarioPOIOpcode(WorldPacket& recvPacket);
+        void SendScenarioState();
+        void SendScenarioProgressUpdate();
+        void SendScenarioPOIs();
+
         void SendBroadcastText(uint32 entry);
 
         int32 HandleEnableNagleAlgorithm();

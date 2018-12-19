@@ -325,6 +325,7 @@ void OpcodeTable::InitializeClientTable()
     DEFINE_OPCODE_HANDLER(CMSG_QUERY_GUILD_REWARDS,                          0x06C4, STATUS_LOGGEDIN,  PROCESS_INPLACE,      &WorldSession::HandleGuildRewardsQueryOpcode             ); // 5.4.8 18414
     DEFINE_OPCODE_HANDLER(CMSG_QUERY_GUILD_XP,                               0x05F8, STATUS_LOGGEDIN,  PROCESS_THREADUNSAFE, &WorldSession::HandleGuildQueryXPOpcode                  ); // 5.4.8 18414
     DEFINE_OPCODE_HANDLER(CMSG_QUERY_INSPECT_ACHIEVEMENTS,                   0x0373, STATUS_LOGGEDIN,  PROCESS_THREADUNSAFE, &WorldSession::HandleQueryInspectAchievements            ); // 5.4.8 18414
+    DEFINE_OPCODE_HANDLER(CMSG_QUERY_SCENARIO_POI,                           0x1A22, STATUS_LOGGEDIN,  PROCESS_THREADUNSAFE, &WorldSession::HandleQueryScenarioPOIOpcode              ); // 5.4.8 18414
     DEFINE_OPCODE_HANDLER(CMSG_QUERY_TIME,                                   0x0640, STATUS_LOGGEDIN,  PROCESS_THREADUNSAFE, &WorldSession::HandleQueryTimeOpcode                     ); // 5.4.8 18414
     DEFINE_OPCODE_HANDLER(CMSG_QUEST_GIVER_ACCEPT_QUEST,                     0x06D1, STATUS_LOGGEDIN,  PROCESS_THREADUNSAFE, &WorldSession::HandleQuestgiverAcceptQuestOpcode         ); // 5.4.8 18414
     DEFINE_OPCODE_HANDLER(CMSG_QUEST_GIVER_CHOOSE_REWARD,                    0x07CB, STATUS_LOGGEDIN,  PROCESS_THREADUNSAFE, &WorldSession::HandleQuestgiverChooseRewardOpcode        ); // 5.4.8 18414
@@ -843,6 +844,9 @@ void OpcodeTable::InitializeServerTable()
     DEFINE_OPCODE_HANDLER(SMSG_HIGHEST_THREAT_UPDATE,              0x14AE, STATUS_NEVER    ); // 5.4.8 18414
     DEFINE_OPCODE_HANDLER(SMSG_HOTFIX_NOTIFY_BLOB,                 0x1EBA, STATUS_NEVER    ); // 5.4.8 18414
     DEFINE_OPCODE_HANDLER(SMSG_INITIALIZE_FACTIONS,                0x0AAA, STATUS_NEVER    ); // 5.4.8 18414
+    DEFINE_OPCODE_HANDLER(SMSG_SCENARIO_POIS,                      0x020A, STATUS_NEVER    ); // 5.4.8 18414
+    DEFINE_OPCODE_HANDLER(SMSG_SCENARIO_PROGRESS_UPDATE,           0x02BA, STATUS_NEVER    ); // 5.4.8 18414
+    DEFINE_OPCODE_HANDLER(SMSG_SCENARIO_STATE,                     0x088F, STATUS_NEVER    ); // 5.4.8 18414
     DEFINE_OPCODE_HANDLER(SMSG_SEND_KNOWN_SPELLS,                  0x045A, STATUS_NEVER    ); // 5.4.8 18414
     DEFINE_OPCODE_HANDLER(SMSG_SETUP_CURRENCY,                     0x1A8B, STATUS_NEVER    ); // 5.4.8 18414
     DEFINE_OPCODE_HANDLER(SMSG_INIT_WORLD_STATES,                  0x1560, STATUS_NEVER    ); // 5.4.8 18414
