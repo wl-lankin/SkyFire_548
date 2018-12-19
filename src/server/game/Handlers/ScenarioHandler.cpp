@@ -82,6 +82,8 @@ void WorldSession::SendScenarioState()
         data.WriteBits(progress.Flags, 4);
     }
 
+    data.WriteBit(ObjectiveComplete);
+
     data.FlushBits();
 
     for (auto const& progress : CriteriaProgress)
