@@ -792,6 +792,52 @@ void Group::Disband(bool hideDestroy /* = false */)
 }
 
 /*********************************************************/
+/***                  ARENA SYSTEM                     ***/
+/*********************************************************/
+
+uint32 Group::GetRating(uint8 slot)
+{
+    uint32 rating = 0;
+    uint32 count = 0;
+    for (member_witerator itr = m_memberSlots.begin(); itr != m_memberSlots.end(); ++itr)
+    {
+        if (Player * player = ObjectAccessor::FindPlayer(itr->guid))
+        {
+            rating += player->GetArenaPersonalRating(slot);
+            ++count;
+        }
+    }
+
+    if (!count)
+        count = 1;
+
+    rating /= count;
+    return rating;
+}
+
+uint32 Group::GetAverageMMR(uint8 slot)
+{
+    uint32 rating = 0;
+    uint32 count = 0;
+    for (member_witerator itr = m_memberSlots.begin(); itr != m_memberSlots.end(); ++itr)
+    {
+        if (Player * player = ObjectAccessor::FindPlayer(itr->guid))
+        {
+            //TODO: proper MMR implementation?.
+            //rating += player->GetArenaMatchMakerRating(slot);
+            rating += player->GetArenaPersonalRating(slot);
+            ++count;
+        }
+    }
+
+    if (!count)
+        count = 1;
+
+    rating /= count;
+    return rating;
+}
+
+/*********************************************************/
 /***                   LOOT SYSTEM                     ***/
 /*********************************************************/
 

@@ -254,9 +254,7 @@ void WorldSession::HandleCalendarArenaTeam(WorldPacket& recvData)
 
     uint32 arenaTeamId;
     recvData >> arenaTeamId;
-
-    if (ArenaTeam* team = sArenaTeamMgr->GetArenaTeamById(arenaTeamId))
-        team->MassInviteToEvent(this);
+    //DEAD CODE
 }
 
 void WorldSession::HandleCalendarAddEvent(WorldPacket& recvData)

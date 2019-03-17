@@ -2385,7 +2385,6 @@ class Player : public Unit, public GridObject<Player>
     void SetInArenaTeam(uint32 ArenaTeamId, uint8 slot, uint8 type);
     void SetArenaTeamInfoField(uint8 slot, ArenaTeamInfoType type, uint32 value);
     static uint32 GetArenaTeamIdFromDB(uint64 guid, uint8 slot);
-    static void LeaveAllArenaTeams(uint64 guid);
     uint32 GetArenaTeamId(uint8 slot) const
     {
         return GetUInt32Value(PLAYER_FIELD_PVP_INFO + (slot * ARENA_TEAM_END) + ARENA_TEAM_ID);
@@ -3365,7 +3364,6 @@ class Player : public Unit, public GridObject<Player>
     void _LoadSpells(PreparedQueryResult result);
     bool _LoadHomeBind(PreparedQueryResult result);
     void _LoadDeclinedNames(PreparedQueryResult result);
-    void _LoadArenaTeamInfo(PreparedQueryResult result);
     void _LoadEquipmentSets(PreparedQueryResult result);
     void _LoadBGData(PreparedQueryResult result);
     void _LoadGlyphs(PreparedQueryResult result);

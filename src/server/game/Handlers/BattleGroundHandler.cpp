@@ -564,17 +564,6 @@ void WorldSession::HandleBattleFieldPortOpcode(WorldPacket &recvData)
     }
     else // leave queue
     {
-        // if player leaves rated arena match before match start, it is counted as he played but he lost
-        if (ginfo.IsRated && ginfo.IsInvitedToBGInstanceGUID)
-        {
-            ArenaTeam* at = sArenaTeamMgr->GetArenaTeamById(ginfo.Team);
-            if (at)
-            {
-                SF_LOG_DEBUG("bg.battleground", "UPDATING memberLost's personal arena rating for %u by opponents rating: %u, because he has left queue!", GUID_LOPART(_player->GetGUID()), ginfo.OpponentsTeamRating);
-                at->MemberLost(_player, ginfo.OpponentsMatchmakerRating);
-                at->SaveToDB();
-            }
-        }
         sBattlegroundMgr->BuildBattlegroundStatusPacket(&data, bg, _player, queueSlot, STATUS_NONE, _player->GetBattlegroundQueueJoinTime(bgTypeId), 0, 0);
         SendPacket(&data);
 
@@ -712,18 +701,9 @@ void WorldSession::HandleBattlemasterJoinArena(WorldPacket& recvData)
     if (grp->GetLeaderGUID() != _player->GetGUID())
         return;
 
-    uint32 ateamId = _player->GetArenaTeamId(arenaslot);
-    // check real arenateam existence only here (if it was moved to group->CanJoin .. () then we would ahve to get it twice)
-    ArenaTeam* at = sArenaTeamMgr->GetArenaTeamById(ateamId);
-    if (!at)
-    {
-        _player->GetSession()->SendNotInArenaTeamPacket(arenatype);
-        return;
-    }
-
     // get the team rating for queueing
-    arenaRating = at->GetRating();
-    matchmakerRating = at->GetAverageMMR(grp);
+    arenaRating = grp->GetRating(arenaslot);
+    matchmakerRating = grp->GetAverageMMR(arenaslot);
     // the arenateam id must match for everyone in the group
 
     if (arenaRating <= 0)
@@ -739,7 +719,7 @@ void WorldSession::HandleBattlemasterJoinArena(WorldPacket& recvData)
     {
         SF_LOG_DEBUG("bg.battleground", "Battleground: arena team id %u, leader %s queued with matchmaker rating %u for type %u", _player->GetArenaTeamId(arenaslot), _player->GetName().c_str(), matchmakerRating, arenatype);
 
-        ginfo = bgQueue.AddGroup(_player, grp, bgTypeId, bracketEntry, arenatype, true, false, arenaRating, matchmakerRating, ateamId);
+        ginfo = bgQueue.AddGroup(_player, grp, bgTypeId, bracketEntry, arenatype, true, false, arenaRating, matchmakerRating);
         avgTime = bgQueue.GetAverageQueueWaitTime(ginfo, bracketEntry->GetBracketId());
     }
 
@@ -810,35 +790,21 @@ void WorldSession::HandleReportPvPAFK(WorldPacket& recvData)
 
 void WorldSession::HandleRequestRatedBgInfo(WorldPacket & recvData)
 {
-    SF_LOG_DEBUG("network", "WORLD: CMSG_REQUEST_RATED_BG_INFO");
+    SF_LOG_DEBUG("network", "WORLD: CMSG_REQUEST_RATED_BATTLEFIELD_INFO");
 
-    uint8 unk;
-    recvData >> unk;
-
-    SF_LOG_DEBUG("bg.battleground", "WorldSession::HandleRequestRatedBgInfo: unk = %u", unk);
-
-    /// @Todo: perfome research in this case
-    /// The unk fields are related to arenas
-    WorldPacket data(SMSG_RATED_BG_STATS, 72);
-    data << uint32(0);      // BgWeeklyWins20vs20
-    data << uint32(0);      // BgWeeklyPlayed20vs20
-    data << uint32(0);      // BgWeeklyPlayed15vs15
-    data << uint32(0);
-    data << uint32(0);      // BgWeeklyWins10vs10
-    data << uint32(0);
-    data << uint32(0);
-    data << uint32(0);
-    data << uint32(0);      // BgWeeklyWins15vs15
-    data << uint32(0);
-    data << uint32(0);
-    data << uint32(0);
-    data << uint32(0);
-    data << uint32(0);
-    data << uint32(0);
-    data << uint32(0);      // BgWeeklyPlayed10vs10
-    data << uint32(0);
-    data << uint32(0);
-
+    WorldPacket data(SMSG_RATED_BATTLEFIELD_INFO, 4*(8*4));
+    for (uint8 i = 0; i < 4; i++)
+    {
+        data << uint32(0);
+        data << uint32(0);
+        data << uint32(0);
+        data << uint32(0);
+        data << uint32(0);
+        data << uint32(0);
+        data << uint32(0);
+        data << uint32(0);
+    }
+    
     SendPacket(&data);
 }
 
@@ -866,19 +832,3 @@ void WorldSession::HandleRequestPvpReward(WorldPacket& /*recvData*/)
     _player->SendPvpRewards();
 }
 
-void WorldSession::HandleRequestRatedBgStats(WorldPacket& /*recvData*/)
-{
-    SF_LOG_DEBUG("network", "WORLD: CMSG_REQUEST_RATED_BG_STATS");
-
-    WorldPacket data(SMSG_BATTLEFIELD_RATED_INFO, 29);
-    data << uint32(0);  // Reward
-    data << uint8(3);   // unk
-    data << uint32(0);  // unk
-    data << uint32(0);  // unk
-    data << _player->GetCurrencyWeekCap(CURRENCY_TYPE_CONQUEST_META_RBG, true);
-    data << uint32(0);  // unk
-    data << uint32(0);  // unk
-    data << _player->GetCurrency(CURRENCY_TYPE_CONQUEST_POINTS, true);
-
-    SendPacket(&data);
-}

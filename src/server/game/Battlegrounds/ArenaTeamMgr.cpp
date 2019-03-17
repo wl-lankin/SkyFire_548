@@ -38,15 +38,6 @@ ArenaTeamMgr::~ArenaTeamMgr()
 }
 
 // Arena teams collection
-ArenaTeam* ArenaTeamMgr::GetArenaTeamById(uint32 arenaTeamId) const
-{
-    ArenaTeamContainer::const_iterator itr = ArenaTeamStore.find(arenaTeamId);
-    if (itr != ArenaTeamStore.end())
-        return itr->second;
-
-    return NULL;
-}
-
 ArenaTeam* ArenaTeamMgr::GetArenaTeamByName(const std::string& arenaTeamName) const
 {
     std::string search = arenaTeamName;
