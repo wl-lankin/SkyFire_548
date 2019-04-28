@@ -17,7 +17,6 @@ Thanks go out to the following people for various patches/code (listed in the
 order they were added) (there may be duplicates or invalid names, most of them
 were extracted from commits):
 
-wl-lankin
 - _manuel_
 - `win
 - 0xFuture
