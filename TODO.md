@@ -1,4 +1,5 @@
 ## To-do list (Try to keep the order by importance)
+tEST
 * Reputations
 * Achievements / Guild Acievements / Implement acc achievements
 * Update ingame damage / stats calculation, (including newest formulas from paper doll)
